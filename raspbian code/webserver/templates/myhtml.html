@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <script src="static/jquery.min.js"></script>
+    <script src="static/Chart.js"></script>
+    <link rel="stylesheet" href="static/bootstrap.min.css">
+
+</head>
+
+
+<body style="background-color: #eeccff">
+    <div style="margin-top: 50px;">
+        <div style="text-align:center"> <button type="button" id="plot" class="btn btn-success btn-block">Start</button> </div>
+
+        <div id="plotdiv"> <canvas id="myChart" style="width:100%;max-width:700px; margin: 0 auto;"></canvas> </div>
+
+        <div style="text-align:center; margin-top: 50px"><span id="heartbeat" class="btn btn-danger btn-lg">Heart Beat: not-active</span></div>
+    </div>
+
+    <script>
+        SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+        $(document).ready(function(){
+            $("#plot").click(function() {
+                $("#plotdiv").attr('style', "text-align:center; background-color: #f7e6ff; margin-top: 50px; padding-top: 40px;");
+                setInterval(function () {
+                    $.getJSON(SCRIPT_ROOT + '/get_data', {}, function (data) {
+                        $("#heartbeat").text('Heart Beat: ' + data.heart)
+                        var xValues = data.time;
+                        var yValues = data.ecg;
+
+                        new Chart("myChart", {
+                            type: "line",
+                            data: {
+                                labels: xValues,
+                                datasets: [{
+                                    fill: false,
+                                    lineTension: 0,
+                                    backgroundColor: "rgba(0,0,255,1.0)",
+                                    borderColor: "rgba(0,0,255,1.0)",
+                                    data: yValues
+                                }]
+                            },
+                            options: {
+                                legend: {display: false},
+                                animation: false,
+                                scales: {
+                                  xAxes: [{
+                                    gridLines: { color: "#000000" },
+                                    display: true,
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'Time',
+                                        fontColor:'#000000',
+                                        fontSize:18
+                                    },
+                                    ticks: {
+                                       fontColor: "black",
+                                       fontSize: 14
+                                      }
+                                  }],
+                                  yAxes: [{
+                                    gridLines: { color: "#000000" },
+                                    display: true,
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'ECG',
+                                        fontColor:'#000000',
+                                        fontSize:18
+                                    },
+                                    ticks: {
+                                       fontColor: "black",
+                                       fontSize: 14
+                                      }
+                                  }],
+                                  }
+                            }
+                        });
+                    })
+                }, 1000)
+            })
+        });
+
+    
+    </script>
+
+</body>
+
+</html>
