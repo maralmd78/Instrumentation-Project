@@ -1,6 +1,6 @@
 # Instrumentation Project
 ## Introduction
-This project aims to show heartbit and ECG data on a local server in the context of Internet of Things(IoT).
+This project aims to show heartbeat and ECG data on a local server in the context of Internet of Things(IoT).
 The data is read using an arduino and sends them on local network and the server is implemented on a Raspberry Pi with 2 approaches.
 - Thingsboard Platform
 - Custom Platform
